@@ -8,7 +8,7 @@ URL = "http://maps.googleapis.com/maps/api/geocode/json"
 location = "delhi technological university"
 
 # defining a params dict for the parameters to be sent to the API 
-PARAMS = {'address':location,'key':'AIzaSyDsoJU4Vjx4TsY3bTHStewrVVbr7MBtsik'} 
+PARAMS = {'address':location,'key':'GOOGLE_API_KEY'} 
 
 # sending get request and saving the response as response object 
 r = requests.get(url = URL, params = PARAMS) 
