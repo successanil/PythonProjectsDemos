@@ -19,21 +19,10 @@ services:
      - DJANGO_SETTINGS_MODULE
      - "VIRTUAL_HOST:drf.rest.org"
    volumes:
-     - .:/opt/services/django_rest/src
+     - .:/opt/services/djangoapp/src
      - static:/opt/services/django_rest/static
      - media:/opt/services/django_rest/media 
    hostname: "drf.rest.org"
-   networks:
-     - nginx_network
-
-
-  django_blog:
-   image: successanil/django-blog-tutorial
-
-   #volumes:
-    # - .:/opt/services/django_project/src
-
-   hostname: "django.blog.org"
    networks:
      - nginx_network
 
@@ -52,12 +41,9 @@ services:
 #      - 80:80
       - 9002:9002
       - 3000:3000
-      - 9001:9001
     volumes:
       - ./config/nginx/conf.d:/etc/nginx/conf.d
-      #- static:/opt/services/django_project/static
       - static:/opt/services/django_rest/static
-      #- media:/opt/services/django_project/media
       - media:/opt/services/django_rest/media
       - /var/run/docker.sock:/tmp/docker.sock:ro
     networks:
@@ -65,7 +51,6 @@ services:
     depends_on:
       - drf_rest
       - node_blog
-      - django_blog
     
 
 networks:
