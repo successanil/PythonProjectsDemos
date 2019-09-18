@@ -1,0 +1,66 @@
+version: '3'
+services:
+  #db:
+   # image: postgre
+ nginx:
+    image: nginx:latest
+    container_name: nz01
+    volumes:
+      - ./config/nginx:/etc/nginx/conf.d
+      #- ./nginx/sites-avialable/:/etc/nginx/sites-available/ 
+      #- ./nginx/sites-enabled/:/etc/nginx/sites-enabled/
+      #- ./nginx/sites-avialable/drfws:/home/relsell/PythonProjectsDemos/djang-docker-drf/sites-available/drfws
+      #- ./nginx/error.log:/etc/nginx/error_log.log
+      #- ./nginx/cache/:/etc/nginx/cache
+      #- /etc/letsencrypt/:/etc/letsencrypt/
+    ports:
+      - "80:80"
+      #- "9001:9001"
+    networks:
+      - my-net
+    #networks:
+     # - my-net
+    #network_mode: bridge
+    #links:
+     # - drf_rest
+     # - drf_rest2
+
+ drf_rest:
+    build: .
+    command: bash -c "cd django_rest && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:80"
+    container_name: drf_rest
+    #network_mode: "host"
+    #network_mode: bridge
+    networks:
+      - my-net   
+    volumes:
+      - .:/code
+    #depends_on:
+     # - nginx  
+    #links:
+     # - nginx
+    #ports:
+     # - "9001:9001"
+    expose:
+      - "80"
+ drf_rest2:
+    build: .
+    command: bash -c "cd django_rest && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:80"
+    container_name: drf_rest2
+    #network_mode: "host"
+    #network_mode: bridge
+    networks:
+      - my-net   
+    volumes:
+      - .:/code
+    #depends_on:
+     # - nginx  
+    #links:
+     # - nginx
+    #ports:
+     # - "9002:9002"
+    expose:
+      - "80"
+   
+networks:
+ my-net:  

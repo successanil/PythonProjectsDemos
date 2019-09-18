@@ -1,0 +1,37 @@
+version: '3'
+services:
+  #db:
+   # image: postgre
+ nginx:
+    image: nginx:latest
+    container_name: nz01
+    hostname: reverse
+    volumes:
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - static:/opt/services/djangoapp/static
+      - media:/opt/services/djangoapp/media
+    ports:
+      #- "80:80"
+      - 8000:80
+    depends_on:
+      - drf_rest
+    networks:
+      - djang-docker-drf_my-net
+
+ drf_rest:
+    build: .
+    container_name: drf_rest
+    hostname: drf_rest 
+    networks:
+      - djang-docker-drf_my-net
+    environment:
+      - DJANGO_SETTINGS_MODULE
+    volumes:
+      - .:/opt/services/djangoapp/src
+      - static:/opt/services/djangoapp/static
+      - media:/opt/services/djangoapp/media
+    #command: bash -c "cd django_rest && python manage.py makemigrations && python manage.py migrate && gunicorn django_rest.wsgi -b 0.0.0.0:8000"
+
+
+networks:
+ djang-docker-drf_my-net:

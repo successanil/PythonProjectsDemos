@@ -1,17 +1,51 @@
+# resources:
+# http://www.ameyalokare.com/docker/2017/09/20/nginx-flask-postgres-docker-compose.html
+# https://github.com/juggernaut/nginx-flask-postgres-docker-compose-example
+# https://serverfault.com/questions/783806/docker-how-to-django-uwsgi-gunicorn-nginx/787402
+# https://github.com/andrecp/django-tutorial-docker-nginx-postgres
+# https://github.com/realpython/dockerizing-django
+# http://ruddra.com/2016/08/14/docker-django-nginx-postgres/index.html
+# https://stackoverflow.com/questions/32180589/docker-how-to-expose-a-socket-over-a-port-for-a-django-application
+
+
 version: '3'
 
 services:
-  db:
-    image: postgres
-  web:
+
+  # web container, with django + gunicorn
+  drf_rest:
     build: .
-    image: successanil/relsell_global_public_docker:python-django
-    command: python manage.py makemigrations
-    command: python manage.py migrate
-    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - DJANGO_SETTINGS_MODULE
+      - "VIRTUAL_HOST:drf.rest.org"
     volumes:
-      - .:/code
+      - .:/opt/services/djangoapp/src
+      - static:/opt/services/django_rest/static
+      - media:/opt/services/django_rest/media 
+    hostname: "drf.rest.org"
+    networks:
+      - nginx_network
+
+  # reverse proxy container (nginx)
+  nginx:
+    image: nginx:1.13
     ports:
-      - "8000:8000"
+      - 8000:80
+    volumes:
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - static:/opt/services/django_rest/static
+      - media:/opt/services/django_rest/media
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - nginx_network
     depends_on:
-      - db
+      - drf_rest
+    
+
+networks:
+  nginx_network:
+    driver: bridge
+
+volumes:
+  static:
+  media:
