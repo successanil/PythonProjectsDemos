@@ -28,10 +28,10 @@ services:
 
 
   django_blog:
-   image: successanil/django-blog-tutorial
-
+   image: successanil/docker-blog-tutorial-n
    #volumes:
     # - .:/opt/services/django_project/src
+    # - static:/opt/services/django_project/static
 
    hostname: "django.blog.org"
    networks:

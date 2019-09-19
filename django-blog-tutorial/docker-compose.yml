@@ -1,0 +1,36 @@
+
+
+version: '3'
+
+services:
+
+  django_blog:
+   build: .
+   image: successanil/docker-blog-tutorial-n 
+   volumes:
+    - .:/opt/services/django_project/src
+    - static:/opt/services/django_project/static
+   networks:
+    - nginx_network
+
+
+  nginx:
+   image: nginx:1.13
+   ports:
+    - 9001:9001
+   volumes:
+    - ./config/nginx/conf.d:/etc/nginx/conf.d
+    - static:/opt/services/django_project/static
+    - /var/run/docker.sock:/tmp/docker.sock:ro
+   networks:
+    - nginx_network
+   depends_on:
+    - django_blog
+
+
+networks:
+  nginx_network:
+    driver: bridge
+
+volumes:
+  static:

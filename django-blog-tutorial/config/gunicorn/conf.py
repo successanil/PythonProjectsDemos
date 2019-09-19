@@ -1,4 +1,4 @@
-name = 'django_project'
+name = 'django_blog'
 loglevel = 'info'
 errorlog = '-'
 accesslog = '-'
