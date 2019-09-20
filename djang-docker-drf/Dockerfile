@@ -8,6 +8,7 @@ WORKDIR /opt/services/django_rest/src
 COPY . /opt/services/django_rest/src
 RUN pip install -r /opt/services/django_rest/src/requirements.txt
 
+
 RUN cd django_rest && python manage.py collectstatic --no-input
 
 EXPOSE 8000
