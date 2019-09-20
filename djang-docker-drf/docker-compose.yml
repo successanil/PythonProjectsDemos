@@ -12,18 +12,18 @@ version: '3'
 
 services:
   db:
-    image: postgres:9.5
-    environment:
-      - POSTGRES_USER:admin
-      - POSTGRES_PASSWORD:success123
-      - POSTGRES_DB:drf_db
+    image: postgres
+    #environment:
+     # - POSTGRES_USER:admin
+     # - POSTGRES_PASSWORD:success123
+     # - POSTGRES_DB:drf_db
     ports:
       - "5432:5432"
     networks:
       - nginx_network
 
-    #volumes:
-    #  - ./docker/postgresql/data:/var/lib/postgresql/data 
+    volumes:
+      - ./docker/postgresql/data:/var/lib/postgresql/data 
 
   # web container, with django + gunicorn
   drf_rest:
