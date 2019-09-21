@@ -12,6 +12,20 @@ version: '3'
 
 services:
 
+  db:
+    image: postgres
+    #environment:
+     # - POSTGRES_USER:admin
+     # - POSTGRES_PASSWORD:success123
+     # - POSTGRES_DB:drf_db
+    ports:
+     - "5432:5432"
+    networks:
+     - nginx_network
+
+    volumes:
+     - ./docker/postgresql/data:/var/lib/postgresql/data
+
   # web container, with django + gunicorn
   drf_rest:
    build: .
@@ -25,25 +39,33 @@ services:
    hostname: "drf.rest.org"
    networks:
      - nginx_network
-
-
-  django_blog:
-   image: successanil/docker-blog-tutorial-n
-   #volumes:
-    # - .:/opt/services/django_project/src
-    # - static:/opt/services/django_project/static
-
-   hostname: "django.blog.org"
-   networks:
-     - nginx_network
+   depends_on:
+     - db
 
 
 
+  #django_blog:
+  #   image: successanil/docker-blog-tutorial-n
+  #   volumes:
+  #    - staticp:/opt/services/django_project/staticp
 
-  node_blog:
-     image: successanil/node-app
-     networks:
-      - nginx_network
+  #   hostname: "django.blog.org"
+  #   networks:
+  #    - nginx_network
+  #   depends_on:
+  #    - db
+
+
+
+
+  #node_blog:
+  #   image: successanil/node-app
+  #   networks:
+  #    - nginx_network
+  #   depends_on:
+  #    - db
+  #    - drf_rest
+ 
 
   # reverse proxy container (nginx)
   nginx:
@@ -51,11 +73,11 @@ services:
     ports:
 #      - 80:80
       - 9002:9002
-      - 3000:3000
-      - 9001:9001
+    #  - 3000:3000
+   #   - 9001:9001
     volumes:
       - ./config/nginx/conf.d:/etc/nginx/conf.d
-      #- static:/opt/services/django_project/static
+     # - staticp:/opt/services/django_project/staticp
       - static:/opt/services/django_rest/static
       #- media:/opt/services/django_project/media
       - media:/opt/services/django_rest/media
@@ -64,8 +86,9 @@ services:
       - nginx_network
     depends_on:
       - drf_rest
-      - node_blog
-      - django_blog
+      #- node_blog
+      #- django_blog
+      - db
     
 
 networks:
@@ -74,4 +97,5 @@ networks:
 
 volumes:
   static:
+  #staticp:
   media:

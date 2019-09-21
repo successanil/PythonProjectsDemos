@@ -11,19 +11,19 @@
 version: '3'
 
 services:
-  db:
-    image: postgres
+  #db:
+   # image: postgres
     #environment:
      # - POSTGRES_USER:admin
      # - POSTGRES_PASSWORD:success123
      # - POSTGRES_DB:drf_db
-    ports:
-      - "5432:5432"
-    networks:
-      - nginx_network
+   # ports:
+   #   - "5432:5432"
+   # networks:
+   #   - nginx_network
 
-    volumes:
-      - ./docker/postgresql/data:/var/lib/postgresql/data 
+   # volumes:
+   #   - ./docker/postgresql/data:/var/lib/postgresql/data 
 
   # web container, with django + gunicorn
   drf_rest:
@@ -32,7 +32,7 @@ services:
       - DJANGO_SETTINGS_MODULE
       - "VIRTUAL_HOST:drf.rest.org"
     volumes:
-      - .:/opt/services/djangoapp/src
+      - .:/opt/services/django_rest/src
       - static:/opt/services/django_rest/static
       - media:/opt/services/django_rest/media 
     hostname: "drf.rest.org"
@@ -45,7 +45,7 @@ services:
   nginx:
     image: nginx:1.13
     ports:
-      - 8000:80
+      - 8000:8000
     volumes:
       - ./config/nginx/conf.d:/etc/nginx/conf.d
       - static:/opt/services/django_rest/static
