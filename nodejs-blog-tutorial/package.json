@@ -15,6 +15,7 @@
     "express": "^4.17.1",
     "mongoose": "^5.7.0",
     "nodemon": "^1.19.2",
+    "saslprep": "^1.0.3",
     "startbootstrap-clean-blog": "^5.0.7"
   }
 }
